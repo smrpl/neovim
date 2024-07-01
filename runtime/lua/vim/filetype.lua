@@ -4,7 +4,7 @@ local fn = vim.fn
 local M = {}
 
 --- @alias vim.filetype.mapfn fun(path:string,bufnr:integer, ...):string?, fun(b:integer)?
---- @alias vim.filetype.maptbl {[1]:string|vim.filetype.mapfn, [2]:{priority:integer}}
+--- @alias vim.filetype.maptbl [string|vim.filetype.mapfn, {priority:integer}]
 --- @alias vim.filetype.mapping.value string|vim.filetype.mapfn|vim.filetype.maptbl
 --- @alias vim.filetype.mapping table<string,vim.filetype.mapping.value>
 
@@ -203,6 +203,10 @@ local extension = {
     return 'aspvbs'
   end,
   asm = detect.asm,
+  s = detect.asm,
+  S = detect.asm,
+  a = detect.asm,
+  A = detect.asm,
   lst = detect.asm,
   mac = detect.asm,
   asn1 = 'asn',
@@ -281,7 +285,6 @@ local extension = {
   cook = 'cook',
   cmake = 'cmake',
   cmod = 'cmod',
-  lib = 'cobol',
   cob = 'cobol',
   cbl = 'cobol',
   atg = 'coco',
@@ -366,6 +369,7 @@ local extension = {
   gv = 'dot',
   drac = 'dracula',
   drc = 'dracula',
+  dsp = detect.dsp,
   dtd = 'dtd',
   d = detect.dtrace,
   dts = 'dts',
@@ -417,6 +421,7 @@ local extension = {
   fal = 'falcon',
   fan = 'fan',
   fwt = 'fan',
+  lib = 'faust',
   fnl = 'fennel',
   m4gl = 'fgl',
   ['4gl'] = 'fgl',
@@ -468,6 +473,7 @@ local extension = {
   gmi = 'gemtext',
   gemini = 'gemtext',
   gift = 'gift',
+  prettierignore = 'gitignore',
   gleam = 'gleam',
   glsl = 'glsl',
   gn = 'gn',
@@ -666,7 +672,6 @@ local extension = {
   eml = 'mail',
   mk = 'make',
   mak = 'make',
-  dsp = 'make',
   page = 'mallard',
   map = 'map',
   mws = 'maple',
@@ -705,6 +710,10 @@ local extension = {
   mmp = 'mmp',
   mms = detect.mms,
   DEF = 'modula2',
+  m3 = 'modula3',
+  i3 = 'modula3',
+  mg = 'modula3',
+  ig = 'modula3',
   lm3 = 'modula3',
   mojo = 'mojo',
   ['🔥'] = 'mojo', -- 🙄
@@ -845,6 +854,7 @@ local extension = {
   psf = 'psf',
   psl = 'psl',
   pug = 'pug',
+  purs = 'purescript',
   arr = 'pyret',
   pxd = 'pyrex',
   pyx = 'pyrex',
@@ -872,6 +882,7 @@ local extension = {
   t6 = 'raku',
   p6 = 'raku',
   raml = 'raml',
+  rasi = 'rasi',
   rbs = 'rbs',
   rego = 'rego',
   rem = 'remind',
@@ -947,9 +958,11 @@ local extension = {
   sexp = 'sexplib',
   bash = detect.bash,
   bats = detect.bash,
+  cygport = detect.bash,
   ebuild = detect.bash,
   eclass = detect.bash,
   env = detect.sh,
+  envrc = detect.sh,
   ksh = detect.ksh,
   sh = detect.sh,
   mdd = 'sh',
@@ -970,6 +983,7 @@ local extension = {
   cdf = 'skill',
   sl = 'slang',
   ice = 'slice',
+  slint = 'slint',
   score = 'slrnsc',
   sol = 'solidity',
   smali = 'smali',
@@ -981,6 +995,7 @@ local extension = {
   smt = 'smith',
   smithy = 'smithy',
   sml = 'sml',
+  smk = 'snakemake',
   spt = 'snobol4',
   sno = 'snobol4',
   sln = 'solution',
@@ -1150,6 +1165,8 @@ local extension = {
   wbt = 'winbatch',
   wit = 'wit',
   wml = 'wml',
+  wsf = 'wsh',
+  wsc = 'wsh',
   wsml = 'wsml',
   ad = 'xdefaults',
   xhtml = 'xhtml',
@@ -1431,6 +1448,10 @@ local filename = {
   ['/etc/host.conf'] = 'hostconf',
   ['/etc/hosts.allow'] = 'hostsaccess',
   ['/etc/hosts.deny'] = 'hostsaccess',
+  ['hyprland.conf'] = 'hyprlang',
+  ['hyprpaper.conf'] = 'hyprlang',
+  ['hypridle.conf'] = 'hyprlang',
+  ['hyprlock.conf'] = 'hyprlang',
   ['/.icewm/menu'] = 'icemenu',
   ['.indent.pro'] = 'indent',
   indentrc = 'indent',
@@ -1443,6 +1464,7 @@ local filename = {
   ['.firebaserc'] = 'json',
   ['.prettierrc'] = 'json',
   ['.stylelintrc'] = 'json',
+  ['.lintstagedrc'] = 'json',
   ['flake.lock'] = 'json',
   ['.babelrc'] = 'jsonc',
   ['.eslintrc'] = 'jsonc',
@@ -1611,6 +1633,7 @@ local filename = {
   ['/etc/slp.spi'] = 'slpspi',
   ['.slrnrc'] = 'slrnrc',
   ['sendmail.cf'] = 'sm',
+  Snakefile = 'snakemake',
   ['.sqlite_history'] = 'sql',
   ['squid.conf'] = 'squid',
   ['ssh_config'] = 'sshconfig',
@@ -1630,7 +1653,7 @@ local filename = {
   ['.xsdbcmdhistory'] = 'tcl',
   ['texmf.cnf'] = 'texmf',
   COPYING = 'text',
-  README = 'text',
+  README = detect_seq(detect.haredoc, 'text'),
   LICENSE = 'text',
   AUTHORS = 'text',
   tfrc = 'tf',
@@ -1728,8 +1751,6 @@ local pattern = {
   ['.*asterisk/.*%.conf.*'] = starsetf('asterisk'),
   ['.*asterisk.*/.*voicemail%.conf.*'] = starsetf('asteriskvm'),
   ['.*/%.aptitude/config'] = 'aptconf',
-  ['.*%.[aA]'] = detect.asm,
-  ['.*%.[sS]'] = detect.asm,
   ['[mM]akefile%.am'] = 'automake',
   ['.*/bind/db%..*'] = starsetf('bindzone'),
   ['.*/named/db%..*'] = starsetf('bindzone'),
@@ -1785,8 +1806,6 @@ local pattern = {
   ['.*/etc/apt/sources%.list%.d/.*%.list'] = 'debsources',
   ['.*/etc/apt/sources%.list'] = 'debsources',
   ['.*/etc/apt/sources%.list%.d/.*%.sources'] = 'deb822sources',
-  ['.*%.directory'] = 'desktop',
-  ['.*%.desktop'] = 'desktop',
   ['dictd.*%.conf'] = 'dictdconf',
   ['.*/etc/DIR_COLORS'] = 'dircolors',
   ['.*/etc/dnsmasq%.conf'] = 'dnsmasq',
@@ -2004,7 +2023,6 @@ local pattern = {
       return 'modconf'
     end
   end),
-  ['.*%.[mi][3g]'] = 'modula3',
   ['Muttrc'] = 'muttrc',
   ['Muttngrc'] = 'muttrc',
   ['.*/etc/Muttrc%.d/.*'] = starsetf('muttrc'),
@@ -2151,7 +2169,6 @@ local pattern = {
   ['.*%.[Ll][Oo][Gg]'] = detect.log,
   ['.*/etc/config/.*'] = starsetf(detect.uci),
   ['.*%.vhdl_[0-9].*'] = starsetf('vhdl'),
-  ['.*%.ws[fc]'] = 'wsh',
   ['.*/Xresources/.*'] = starsetf('xdefaults'),
   ['.*/app%-defaults/.*'] = starsetf('xdefaults'),
   ['.*/etc/xinetd%.conf'] = 'xinetd',
@@ -2312,7 +2329,6 @@ end
 --- vim.filetype.add {
 ---   pattern = {
 ---     ['.*'] = {
----       priority = -math.huge,
 ---       function(path, bufnr)
 ---         local content = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1] or ''
 ---         if vim.regex([[^#!.*\\<mine\\>]]):match_str(content) ~= nil then
@@ -2321,6 +2337,7 @@ end
 ---           return 'drawing'
 ---         end
 ---       end,
+---       { priority = -math.huge },
 ---     },
 ---   },
 --- }

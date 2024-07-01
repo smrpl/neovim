@@ -3,6 +3,7 @@ local protocol = require('vim.lsp.protocol')
 local ms = protocol.Methods
 local util = require('vim.lsp.util')
 local api = vim.api
+local completion = require('vim.lsp.completion')
 
 --- @type table<string,lsp.Handler>
 local M = {}
@@ -353,7 +354,7 @@ M[ms.textDocument_completion] = function(_, result, _, _)
   local textMatch = vim.fn.match(line_to_cursor, '\\k*$')
   local prefix = line_to_cursor:sub(textMatch + 1)
 
-  local matches = util.text_document_completion_list_to_complete_items(result, prefix)
+  local matches = completion._lsp_to_complete_items(result, prefix)
   vim.fn.complete(textMatch + 1, matches)
 end
 
@@ -645,6 +646,7 @@ M[ms.window_showMessage] = function(_, result, ctx, _)
   if message_type == protocol.MessageType.Error then
     err_message('LSP[', client_name, '] ', message)
   else
+    --- @type string
     local message_type_name = protocol.MessageType[message_type]
     api.nvim_out_write(string.format('LSP[%s][%s] %s\n', client_name, message_type_name, message))
   end

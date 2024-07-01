@@ -28,6 +28,7 @@
 #include "nvim/cursor.h"
 #include "nvim/decoration.h"
 #include "nvim/drawscreen.h"
+#include "nvim/errors.h"
 #include "nvim/eval.h"
 #include "nvim/eval/typval.h"
 #include "nvim/eval/typval_defs.h"
@@ -313,7 +314,7 @@ void nvim_feedkeys(String keys, String mode, Boolean escape_ks)
     keys_esc = keys.data;
   }
   if (lowlevel) {
-    input_enqueue_raw(cstr_as_string(keys_esc));
+    input_enqueue_raw(keys_esc, strlen(keys_esc));
   } else {
     ins_typebuf(keys_esc, (remap ? REMAP_YES : REMAP_NONE),
                 insert ? 0 : typebuf.tb_len, !typed, false);
@@ -1332,36 +1333,6 @@ void nvim_put(ArrayOf(String) lines, String type, Boolean after, Boolean follow,
     msg_silent--;
     VIsual_active = VIsual_was_active;
   });
-}
-
-/// Subscribes to event broadcasts.
-///
-/// @param channel_id Channel id (passed automatically by the dispatcher)
-/// @param event      Event type string
-void nvim_subscribe(uint64_t channel_id, String event)
-  FUNC_API_SINCE(1) FUNC_API_REMOTE_ONLY
-{
-  size_t length = (event.size < METHOD_MAXLEN ? event.size : METHOD_MAXLEN);
-  char e[METHOD_MAXLEN + 1];
-  memcpy(e, event.data, length);
-  e[length] = NUL;
-  rpc_subscribe(channel_id, e);
-}
-
-/// Unsubscribes to event broadcasts.
-///
-/// @param channel_id Channel id (passed automatically by the dispatcher)
-/// @param event      Event type string
-void nvim_unsubscribe(uint64_t channel_id, String event)
-  FUNC_API_SINCE(1) FUNC_API_REMOTE_ONLY
-{
-  size_t length = (event.size < METHOD_MAXLEN
-                   ? event.size
-                   : METHOD_MAXLEN);
-  char e[METHOD_MAXLEN + 1];
-  memcpy(e, event.data, length);
-  e[length] = NUL;
-  rpc_unsubscribe(channel_id, e);
 }
 
 /// Returns the 24-bit RGB value of a |nvim_get_color_map()| color name or
@@ -2384,8 +2355,8 @@ void nvim__redraw(Dict(redraw) *opts, Error *err)
     }
   }
 
-  int count = (win != NULL) + (buf != NULL);
-  VALIDATE(popcount(opts->is_set__redraw_) > count, "%s", "at least one action required", {
+  unsigned count = (win != NULL) + (buf != NULL);
+  VALIDATE(xpopcount(opts->is_set__redraw_) > count, "%s", "at least one action required", {
     return;
   });
 

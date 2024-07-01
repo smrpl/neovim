@@ -1,7 +1,7 @@
 if exists('s:did_load')
   " Align Nvim defaults to Vim.
   set backspace=
-  set commentstring=/*%s*/
+  set commentstring=/*\ %s\ */
   set complete=.,w,b,u,t,i
   set define=^\\s*#\\s*define
   set directory^=.
@@ -13,6 +13,7 @@ if exists('s:did_load')
   set laststatus=1
   set listchars=eol:$
   set joinspaces
+  set jumpoptions=
   set mousemodel=extend
   set nohidden nosmarttab noautoindent noautoread noruler noshowcmd
   set nohlsearch noincsearch
