@@ -11,7 +11,7 @@
         },
         .lpeg = .{
             .url = "https://github.com/neovim/deps/raw/d495ee6f79e7962a53ad79670cb92488abe0b9b4/opt/lpeg-1.1.0.tar.gz",
-            .hash = "122084badadeb91106dd06b2055119a944c340563536caefd8e22d4064182f7cd6e6",
+            .hash = "N-V-__8AAMnaAwCEutreuREG3QayBVEZqUTDQFY1Nsrv2OIt",
         },
         .luv = .{
             .url = "git+https://github.com/luvit/luv?ref=1.51.0-1#4c9fbc6cf6f3338bb0e0426710cf885ee557b540",
@@ -19,11 +19,11 @@
         },
         .lua_compat53 = .{
             .url = "https://github.com/lunarmodules/lua-compat-5.3/archive/v0.13.tar.gz",
-            .hash = "1220e75685f00c242fbf6c1c60e98dd1b24ba99e38277970a10636e44ed08cf2af8a",
+            .hash = "N-V-__8AADi-AwDnVoXwDCQvv2wcYOmN0bJLqZ44J3lwoQY2",
         },
         .treesitter = .{
-            .url = "git+https://github.com/tree-sitter/tree-sitter?ref=v0.25.4#31b9717ca3d674d6166f8e4aa17e7927b027c1e1",
-            .hash = "tree_sitter-0.26.0-Tw2sR3C5CwBpi7K_Vn9EkVcnPXZegnJ6H0F8WANJhnKB",
+            .url = "git+https://github.com/tree-sitter/tree-sitter?ref=v0.25.6#50622f71f87fa97f1ec463f83447d524d5156286",
+            .hash = "tree_sitter-0.26.0-Tw2sR965CwDPmv5Xf5TZ9MiqGP_CasCBRJE5252Vs_tA",
         },
         .libuv = .{ .path = "./deps/libuv" },
         .utf8proc = .{ .path = "./deps/utf8proc/" },
@@ -34,8 +34,8 @@
             .hash = "N-V-__8AAGevEQCHAkCozca5AIdN9DFc3Luf3g3r2AcbyOrm",
         },
         .treesitter_c = .{
-            .url = "https://github.com/tree-sitter/tree-sitter-c/archive/v0.23.4.tar.gz",
-            .hash = "N-V-__8AAECfSADUxb_Nvy_jsHRlD1-CdzGh4dbf2KCtv7v0",
+            .url = "git+https://github.com/tree-sitter/tree-sitter-c?ref=v0.24.1#7fa1be1b694b6e763686793d97da01f36a0e5c12",
+            .hash = "N-V-__8AANxPSABzw3WBTSH_YkwaGAfrK6PBqAMqQedkDDim",
         },
         .treesitter_markdown = .{
             .url = "git+https://github.com/tree-sitter-grammars/tree-sitter-markdown?ref=v0.5.0#afaa4138517363362f54c89330c9d79391e81168",
@@ -54,8 +54,8 @@
             .hash = "N-V-__8AAI4YCgD7OqxCEAmz2RqT_ohl6eA4F0fGMtLIe7nb",
         },
         .treesitter_query = .{
-            .url = "git+https://github.com/tree-sitter-grammars/tree-sitter-query?ref=v0.6.1#892ebd701a79be0412ff1478177030a725d0c7b7",
-            .hash = "N-V-__8AAGhSBABzxHSGplnXv-x-Ax8TRrRe6QaPo0gSplIz",
+            .url = "git+https://github.com/tree-sitter-grammars/tree-sitter-query?ref=v0.6.2#8a43889f89fd0667289936341bff3a77bafade17",
+            .hash = "N-V-__8AAARLBACBLGiXGFTijEzLv8AwiqT_kJpmVjir1BgX",
         },
     },
     .paths = .{
